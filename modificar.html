@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+
+<body>
+
+    <div id="contenedor-menu"></div>
+    <h1>Modificar</h1>
+
+    <main class="container">
+        <div class="bg-body-tertiary p-5 rounded">
+            <h1>Modificar Personaje</h1>
+
+            <label for="">Serie</label>
+            <select type="text" id="selectserie" class="form-control" onchange="serieSeleccionado()"></select>
+
+            <label for="">Personaje</label>
+            <select type="text" id="selectpersonaje" class="form-control" onchange="personajeSeleccionado()"></select>
+
+            <button id="botonmodificar" class="btn btn-success">Modificar Personaje</button>
+        </div>
+    </main>
+
+    <div class="row">
+        <div id="contenedor1" class='col-md-6'></div>
+        <div id="contenedor2" class='col-md-6'></div>
+    </div>
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script src="js/bootstrap.bundle.js"></script>
+    <script>
+        let urlSeries = 'https://apiseriespersonajes2024.azurewebsites.net/';
+        $(document).ready(function () {
+            $('#contenedor-menu').load('menu.html')
+
+            let requestNombresSeries = 'api/series'
+
+            $.ajax({
+                url: urlSeries + requestNombresSeries,
+                type: 'GET',
+                success: function (data) {
+                    let html = '';
+                    $.each(data, function (index, serie) {
+                        html += '<option value="' + serie.idSerie + '">' + serie.nombre + '</option>';
+                    })
+                    $('#selectserie').html(html);
+                }
+            })
+
+            let requestNombesPersonajes = 'api/Personajes/'
+
+            $.ajax({
+                url: urlSeries + requestNombesPersonajes,
+                type: 'GET',
+                success: function (data) {
+                    let html = '';
+                    $.each(data, function (index, serie) {
+                        html += '<option value="' + serie.idPersonaje + '">' + serie.nombre + '</option>';
+                    })
+                    $('#selectpersonaje').html(html);
+                }
+            })
+
+
+
+            $('#botonmodificar').click(function () {
+
+                let idPersonaje = parseInt($('#selectpersonaje').val());
+                let idserie = parseInt($('#selectserie').val());
+
+                let requestModificar = 'api/Personajes/' + idPersonaje + '/' + idserie;
+
+                $.ajax({
+                    url: urlSeries + requestModificar,
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    success: function () {
+                        console.log('modificado');
+                        window.location.href = 'personajes.html?id=' + idserie;
+                    },
+                });
+
+            })
+
+        })
+
+        function personajeSeleccionado() {
+
+            let idPersonaje = parseInt($('#selectpersonaje').val());
+            let requestPersonajeSeleccionado = 'api/Personajes/' + idPersonaje;
+
+            $.ajax({
+                url: urlSeries + requestPersonajeSeleccionado,
+                type: 'GET',
+                success: function (data) {
+                    let htmlPersonaje = '';
+
+                    htmlPersonaje += "<div class='col-md-6'>"
+                    htmlPersonaje += "<h1>"+data.nombre+"</h1>"
+                    htmlPersonaje += "<hr/>"
+                    htmlPersonaje += "<img src='"+data.imagen+"' style='width:800px'></img>"
+                    htmlPersonaje += "</div>"
+
+                    $('#contenedor2').html(htmlPersonaje);
+                }
+            })
+
+        }
+
+        function serieSeleccionado() {
+
+            let idSerie = parseInt($('#selectserie').val());
+            let requestSerieSeleccionado = 'api/series/' + idSerie;
+
+            $.ajax({
+                url: urlSeries + requestSerieSeleccionado,
+                type: 'GET',
+                success: function (data) {
+                    let htmlSerie = '';
+
+                    
+                    htmlSerie += "<h1>"+data.nombre+"</h1>"
+                    htmlSerie += "<hr/>"
+                    htmlSerie += "<img src='"+data.imagen+"' style='width:800px'></img>"
+                    
+
+                    $('#contenedor1').html(htmlSerie);
+                }
+            })
+
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,53 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Fifth navbar example">
+    <div class="container-fluid">
+        <img src='https://appseries.azurewebsites.net/static/media/logo1.1408c71b2c87ca1fb473.png' style='
+            width: 80px '></img>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample05"
+            aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExample05">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="home.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="create.html">Nuevo personaje</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="modificar.html">Modificar personaje</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <span class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Select</span>
+                    <ul id="lista-menu" class="dropdown-menu">
+
+                    </ul>
+
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<script src="js/jquery-3.7.1.js"></script>
+<script>
+
+    $(document).ready(function () {      
+
+        let request = 'api/series'
+
+        $.ajax({
+            url: urlSeries + request,
+            type: 'GET',
+            success: function (data) {
+                let html = '';
+                $.each(data, function (index, serie) {
+                    html += '<li class="dropdown-item">';
+                    html += '<a class="text-decoration-none text-dark" href="serie.html?id='+serie.idSerie+'">'+ serie.nombre +'</a>';
+                    html += '</li>';
+                })
+                $('#lista-menu').html(html);
+            }
+        })
+    })
+</script>

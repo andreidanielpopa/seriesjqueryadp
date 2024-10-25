@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+
+<body>
+    <div id="contenedor-menu"></div>
+    <img src="https://appseries.azurewebsites.net/static/media/seriestv.e0b0894681a8624917c1.jpg" alt="">
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script src="js/bootstrap.bundle.js"></script>
+    <script>
+        let urlSeries = 'https://apiseriespersonajes2024.azurewebsites.net/';
+        $(document).ready(function () {
+            $('#contenedor-menu').load('menu.html')
+
+        })
+    </script>
+</body>
+
+</html>

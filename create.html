@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+
+<body>
+    <div id="contenedor-menu"></div>
+
+    <main class="container">
+        <div class="bg-body-tertiary p-5 rounded">
+            <h1>Create Personaje</h1>
+            <label for="">Nombre</label>
+            <input type="text" id="cajanombre" class="form-control" />
+            <label for="">Imagen</label>
+            <input type="text" id="cajaimagen" class="form-control" />
+            <label for="">Serie</label>
+            <select type="text" id="selectserie" class="form-control"></select>
+
+            <button id="botoninsert" class="btn btn-success">Insertar Personaje</button>
+        </div>
+    </main>
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script src="js/bootstrap.bundle.js"></script>
+    <script>
+        let urlSeries = 'https://apiseriespersonajes2024.azurewebsites.net/';
+        $(document).ready(function () {
+            $('#contenedor-menu').load('menu.html')
+
+
+            let requestListaSeries = 'api/series'
+
+            $.ajax({
+                url: urlSeries + requestListaSeries,
+                type: 'GET',
+                success: function (data) {
+                    let html = '';
+                    $.each(data, function (index, serie) {
+
+                        html += '<option  value="' + serie.idSerie + '">' + serie.nombre + '</option>';
+
+                    })
+                    $('#selectserie').append(html);
+                }
+            })
+
+            let request = 'api/Personajes'
+
+            $('#botoninsert').click(function(){
+                let nombre = $('#cajanombre').val();
+                let imagen = $('#cajaimagen').val();
+                let idserie = parseInt($('#selectserie').val());
+
+                let personaje = new Object();
+                personaje.idPersonaje = 0;
+                personaje.nombre = nombre;
+                personaje.imagen = imagen;
+                personaje.idSerie = idserie;
+
+                var personajeJSON = JSON.stringify(personaje);
+
+                $.ajax({
+                    url: urlSeries + request,
+                    type: 'POST',
+                    data: personajeJSON,
+                    contentType:'application/json',
+                    success: function () {
+                        console.log('insertado');
+                        window.location.href = 'personajes.html?id='+idserie;
+                    },
+                });
+            })
+        })
+    </script>
+</body>
+
+</html>

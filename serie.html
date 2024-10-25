@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+
+<body>
+    <div id="contenedor-menu"></div>
+    <div id="contenedor"></div>
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script src="js/bootstrap.bundle.js"></script>
+    <script>
+        let urlSeries = 'https://apiseriespersonajes2024.azurewebsites.net/';
+
+        $(document).ready(function () {
+            $('#contenedor-menu').load('menu.html')
+
+            let params = new window.URLSearchParams(window.location.search);
+            let idSerie = parseInt(params.get('id'));
+
+            let request = 'api/series/' + idSerie;
+
+            $.ajax({
+                url: urlSeries + request,
+                type: 'GET',
+                success: function (data) {
+                    let html = '';
+
+                    html += '<h1>Serie</h1>'
+                    html += '<div class="card" style= "width: 18rem" >'
+                    html += '<img src="'+data.imagen+'" class="card-img-top" alt="..." />'
+                    html += '<div class="card-body">'
+                    html += '<h5 class="card-title">'+data.nombre+'</h5>'
+                    html += '<p class="card-text">'+data.puntuacion+'</p>'
+                    html += '<a href="personajes.html?id='+data.idSerie+'" class="btn btn-primary">Personajes</a>'
+                    html += '</div>'
+                    html += '</div>'
+
+                    $('#contenedor').html(html);
+                }
+            })
+        })
+    </script>
+</body>
+
+</html>

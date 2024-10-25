@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+<body>
+    <div id="contenedor-menu"></div>
+    <h1 id="titulo"></h1>
+    <div id="volver"></div>
+    <table id="contenedor" class="table">
+        <thead>
+            <tr>
+                <th>Personaje</th>
+                <th>Imagen</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script src="js/jquery-3.7.1.js"></script>
+    <script src="js/bootstrap.bundle.js"></script>
+    <script>
+        let urlSeries = 'https://apiseriespersonajes2024.azurewebsites.net/';
+
+        $(document).ready(function () {
+            $('#contenedor-menu').load('menu.html')
+
+            let params = new window.URLSearchParams(window.location.search);
+            let idSerie = parseInt(params.get('id'));
+
+            let request = 'api/series/personajesserie/' + idSerie;
+
+            $.ajax({
+                url: urlSeries + request,
+                type: 'GET',
+                success: function (data) {
+                    var html = '';
+                    $.each(data, function (index, personaje) {
+                        html += '<tr>';
+                        html += '<td>' + personaje.nombre + '</td>';
+                        html += '<td><img src="'+ personaje.imagen +'" alt="..." style="width:150px;height:150px"></td>';
+                        html += '</tr>';
+                    });
+                    $('#contenedor tbody').html(html);
+                },
+            });
+
+            $('#titulo').html('Personajes de ' + idSerie)
+
+            $('#volver').append('<a href="serie.html?id=' + idSerie + '" class="btn btn-danger">Voler a la serie</a>');
+
+        })
+    </script>
+</body>
+</html>
